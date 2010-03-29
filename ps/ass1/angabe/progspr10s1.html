@@ -1,0 +1,253 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+               "http://www.w3.org/TR/html4/strict.dtd">
+<HTML lang="de">
+<HEAD>
+  <META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <LINK href="http://www.complang.tuwien.ac.at/complang.css" rel="stylesheet" type="text/css">
+  <LINK href="http://www.complang.tuwien.ac.at/favicon.ico" rel="shortcut icon" type="image/x-icon">
+  <LINK href="http://www.complang.tuwien.ac.at/franz/" rel="Start" type="text/html">
+  <TITLE>1. &Uuml;bungsaufgabe - Programmiersprachen, 2010&nbsp;S</TITLE>
+</HEAD>
+
+<BODY id="top">
+<DIV class="logo">
+<A href="http://www.complang.tuwien.ac.at/" title="Die Complang-Gruppe">
+  <IMG class="logo" alt="Computer Languages" src="http://www.complang.tuwien.ac.at/logo">
+</A>
+</DIV>
+
+<DIV>
+<P class="rightquote">
+  Programmiersprachen<BR>
+   LVA 185.208, VL 2.0, 2010 S
+</P>
+<H1>1. &Uuml;bungsaufgabe</H1>
+<H4>Aufgabe:</H4>
+Entwickeln Sie in einer objektorientierten Programmiersprache Ihrer Wahl eine Simulation eines programmierbaren Taschenrechners entsprechend folgenden Spezifikationen und l&ouml;sen Sie damit die weiter unten beschriebene Testaufgabe.
+
+<H4>Eingaben in den Taschenrechner:</H4>
+Eingaben erfolgen in Postfix-Notation (auch UPN-Logik genannt - zuerst kommen die Argumente, danach der Operator).
+Die Anzahl der ben&ouml;tigten Argumente h&auml;ngt vom Operator ab.
+Argumente sind Flie&szlig;kommazahlen oder Ausdr&uuml;cke in Klammern.
+Zum Beispiel ist <Q>1 2+</Q> eine Anwendung des Operators <Q>+</Q> auf 1 und 2, die als Ergebnis 3 liefert.
+Der Ausdruck <Q>1 2 3 4+*-</Q> wird zu 1-(2*(3+4)) = -13 ausgewertet:
+Der erste Operator addiert die direkt davor stehenden Argumente 3 und 4 zu 7, der Operator <Q>*</Q> wird auf die nach der Addition direkt davor stehenden Argumente 2 und 7 angewandt, und schlie&szlig;lich <Q>-</Q> auf 1 und 14.
+<P>
+Ausdr&uuml;cke in Klammern werden nicht gleich ausgewertet.
+Einige Operatoren verarbeiten geklammerte Ausdr&uuml;cke als Argumente.
+Zum Beispiel wird <Q>(2*)</Q> als Argument des Operators <Q>a</Q> selbst als Operator gesehen, der ein Argument mit 2 multipliziert.
+Der Ausdruck <Q>3(2*)a</Q> wird zu <Q>3 2*</Q> bzw. 6 ausgewertet.
+<P>
+Der Taschenrechner verarbeitet immer ganze Zeilen (abgeschlossen durch einen Zeilenumbruch oder EOF) auf einmal.
+Nach Verarbeitung jeder Zeile gibt der Taschenrechner-Simulator den aktuellen Zustand (die vier obersten Stackeintr&auml;ge, siehe unten) aus.
+
+<H4>Architektur:</H4>
+Der Taschenrechner besteht aus folgenden Teilen:
+<DL>
+<DT>Stack
+<DD>Ausdr&uuml;cke in Postfix-Notation k&ouml;nnen mit Hilfe eines Stacks einfach berechnet werden:
+  Jedes Argument wird als neuer Eintrag am Top-of-Stack abgelegt.
+  Die Ausf&uuml;hrung eines Operators nimmt die ben&ouml;tigte Anzahl von Argumenten vom Stack und legt Ergebnisse auf den Stack.
+  Die Ausgabe des Taschenrechners soll die obersten vier Stackeintr&auml;ge umfassen.
+<DT>Eingabeliste
+<DD>Sie enth&auml;lt die noch nicht abgearbeiteten Eingaben (nur ASCII-Zeichen).
+  Alle Eingaben werden zeichenweise in der Reihenfolge in dieser Liste abgearbeitet.
+  Neben direkten Eingaben in den Taschenrechner-Simulator werden auch durch den Operator <Q>a</Q> Eingaben in diese Liste geschrieben.
+<DT>Argumentspeicher
+<DD>Zur Vereinfachung der Eingabe von Zahlen und geklammerten Ausdr&uuml;cken verwenden wir diesen Speicher, der zwischen dem Stack und der Eingabeliste steht.
+  Zeichen f&uuml;r Zeichen wird aus der Eingabeliste in den Argumentspeicher geschoben.
+  Direkt hintereinander stehende Ziffern (sowie Kommas) werden im Argumentspeicher zu Zahlen zusammengesetzt.
+  Erst wenn ein anderes Zeichen folgt, wandert die bis dahin zusammengesetzte Zahl vom Argumentspeicher (als Flie&szlig;kommazahl mit m&ouml;glichst langer Mantisse) auf den Stack.
+  Ebenso kommen nach einer &ouml;ffnenden Klammer alle Eingaben in den Argumentspeicher und werden von dort erst bei Abarbeitung der entsprechenden schlie&szlig;enden Klammer als ein Argument (z.B. als String) auf den Stack gelegt.
+  Klammern k&ouml;nnen geschachtelt sein.
+  Erst bei Schlie&szlig;en der letzten offenen Klammer ist das Argument abgeschlossen.
+  Alle anderen sinnvollen Eingaben sind vordefinierte Operatoren, die direkt auf dem Stack ausgef&uuml;hrt werden.
+</DL>
+<P>
+Zur Vereinfachung k&ouml;nnen f&uuml;r den Stack, die Eingabeliste, geklammerte Ausdr&uuml;cke und Zahlen (vern&uuml;nftig gew&auml;hlte) Maximalgr&ouml;&szlig;en festgelegt werden, bei deren &Uuml;berschreitung eine Fehlermeldung ausgegeben wird.
+Nach Fehlermeldungen kann die Programmausf&uuml;hrung abgebrochen werden.
+
+<H4>Operationen:</H4>
+Die Bedeutung folgender Eingaben ist vordefiniert:
+<DL>
+<DT>Ziffern <Q>0</Q> bis <Q>9</Q> sowie <Q>,</Q> (oder wenn Sie wollen <Q>.</Q>)
+<DD>werden im Argumentspeicher zu Zahlen zusammengesetzt.
+<DT><Q>(</Q> und <Q>)</Q>:
+<DD>Die &ouml;ffnende Klammer bewirkt, dass alle folgenden Eingaben bis zur entsprechenden schlie&szlig;enden Klammer im Argumentspeicher gesammelt werden.
+<DT>White space (Leerzeichen, Tabulator, Newline, Return):
+<DD>Eine m&ouml;glicherweise gerade im Argumentspeicher zusammengesetzte Zahl wird auf den Stack gelegt.
+  Es wird keine weitere Aktion durchgef&uuml;hrt.
+<DT>Arithmetische Operatoren und Vergleichsoperatoren (<Q>+</Q>, <Q>-</Q>, <Q>*</Q>, <Q>/</Q>, <Q>&amp;</Q>, <Q>|</Q>, <Q>=</Q>, <Q>&lt;</Q>, <Q>&gt;</Q>):
+<DD>Diese zweistelligen Operatoren entsprechen den Grundrechnungen und einfachen Vergleichen, wobei &amp; bzw. | als logisches UND bzw. ODER verwendbar ist.
+  Diese Operatoren nehmen die zwei obersten Argumente vom Stack und legen das Ergebnis auf den Stack.
+  Wenn ein Argument keine Zahl bzw. kein Wahrheitswert ist, soll ein Fehler gemeldet werden.
+  Ausgenommen hiervon ist nur <Q>=</Q>:
+  Wenn <Q>=</Q> auf zwei gleiche geklammerte Ausdr&uuml;cke oder zwei gleiche Zahlen angewandt wird, soll als Ergebnis <Q>wahr</Q> zur&uuml;ckgegeben werden, sonst <Q>falsch</Q>.
+  Dabei wird <Q>wahr</Q> durch die Zahl 0 (genauer: 0,0) und <Q>falsch</Q> durch 1 (genauer: 1,0) dargestellt.
+  Bei nichtassoziativen Operationen ist auf die Reihenfolge der Argumente zu achten:
+  <Q>4 2-</Q> und <Q>4 2/</Q> sollen jeweils 2 ergeben, und <Q>4 2&gt;</Q> und <Q>2 4&lt;</Q> sollen <Q>wahr</Q> liefern.
+  Ein Fehler soll gemeldet werden, wenn das zweite Argument von / gleich 0 ist.
+<DT>Vorzeichen&auml;nderung <Q>~</Q>
+<DD>ist nur auf Zahlen definiert.
+<DT>Runden gegen 0 <Q>i</Q>
+<DD>ist nur auf Zahlen definiert und rundet eine Flie&szlig;kommazahl auf eine ganze Zahl in Richtung 0.
+  Die Eingaben <Q>9,9i</Q> und <Q>9,9~i</Q> liefern also die Ergebnisse 9 und -9.
+<DT>Rundungsfehler <Q>r</Q>
+<DD>ist nur auf Zahlen definiert und liefert die Differenz zwischen der gegebenen Zahl und einer entsprechenden gegen 0 gerundeten Zahl.
+  Die Eingaben <Q>9,9r</Q> und <Q>9,9~r</Q> liefern also die Ergebnisse 0,9 und -0,9.
+<DT>Kopieren <Q>c</Q>
+<DD>ersetzt das oberste Argument f am Stack durch eine Kopie des n-ten Arguments am Stack, wobei n durch Runden von f gegen 0 entsteht.
+  Eine Fehlermeldung wird ausgegeben wenn f keine positive Zahl ist oder der Stack nicht ausreichend viele Argumente enth&auml;lt.
+<DT>L&ouml;schen <Q>d</Q>
+<DD>nimmt das oberste Argument f vom Stack und entfernt zus&auml;tzlich das n-ten Argument vom Stack, wobei n durch Runden von f gegen 0 entsteht.
+  Eine Fehlermeldung wird ausgegeben wenn f keine positive Zahl ist oder der Stack nicht ausreichend viele Argumente enth&auml;lt.
+<DT>Anwenden <Q>a</Q>
+<DD>nimmt das oberste Argument vom Stack.
+  Ist das Argument ein geklammerter Ausdruck, dann wird dieser (mit den umschlie&szlig;enden Klammern durch white space ersetzt) an vorderster Stelle in die Eingabeliste geschrieben, damit die darin enthaltenen Eingaben als n&auml;chste abgearbeitet werden.
+  Ist das Argument eine Zahl, dann wird eine Fehlermeldung ausgegeben.
+<DT>Ausschalten <Q>q</Q>
+<DD>beendet das Programm.
+<DT>Konstanten:
+<DD>Sie k&ouml;nnen beliebigen weiteren Zeichen eine Bedeutung als Konstanten geben.
+  Konstante sind geklammerte Ausdr&uuml;cke oder Zahlen.
+  Bei Ausf&uuml;hrung eines entsprechenden Zeichens wird die Konstante als oberstes Element auf den Stack gelegt.
+</DL>
+
+<H4>Beispiele:</H4>
+Einige Beispiele sollen die Verwendung der Operatoren verdeutlichen.
+Wir beschreiben einen Zustand des Taschenrechners durch den Stackinhalt (links vom Zeichen <Q>#</Q>, Top-of-Stack direkt neben <Q>#</Q>, Eintr&auml;ge durch Leerzeichen getrennt) und die Eingabeliste (rechts von <Q>#</Q>, n&auml;chstes zu verarbeitendes Zeichen direkt neben <Q>#</Q>).
+Pfeile zwischen solchen Zustandsbeschreibungen zeigen Zustands&auml;nderungen durch Ausf&uuml;hrung von Operationen an.
+<P>
+Das erste Beispiel zeigt eine bedingte Anweisung:
+Auf dem Stack wird 0 (wahr) oder 1 (falsch) erwartet.
+Abh&auml;ngig davon soll der eine oder andere geklammerte Ausdruck ausgewertet werden.
+Wir legen zuerst den Ausdruck f&uuml;r den wahr-Zweig <Q>(9)</Q> und dann den f&uuml;r den falsch-Zweig <Q>(9~)</Q> auf den Stack und f&uuml;hren einen Ausdruck <Q>(4c5d2+da)</Q> aus, der die eigentliche bedingte Anweisung darstellt (und als Konstante betrachtet werden kann).
+Die folgenden Abarbeitungsschritte zeigen, was passiert, wenn am Stack zuvor 0 gelegen ist:
+<PRE>
+    0,0 #(9)(9~)(4c5d2+da)a
+--> 0,0 (9) #(9~)(4c5d2+da)a
+--> 0,0 (9) (9~) #(4c5d2+da)a
+--> 0,0 (9) (9~) (4c5d2+da) #a
+--> 0,0 (9) (9~) #4c5d2+da 
+--> 0,0 (9) (9~) 4,0 #c5d2+da 
+--> 0,0 (9) (9~) 0,0 #5d2+da 
+--> 0,0 (9) (9~) 0,0 5,0 #d2+da 
+--> (9) (9~) 0,0 #2+da 
+--> (9) (9~) 0,0 2,0 #+da 
+--> (9) (9~) 2,0 #da 
+--> (9) #a 
+--> # 9  
+--> 9,0 #
+</PRE>
+<P>
+Das n&auml;chste Beispiel zeigt anhand der Berechnung von 6 Faktorielle, wie man rekursive Routinen realisieren kann.
+Zur Vereinfachung k&uuml;rzen wir den Ausdruck (3c3c1-2c1=()5cCa3d*) durch A ab, wobei C f&uuml;r den Ausdruck (4c5d2+da) aus dem vorigen Beispiel steht.
+<PRE>
+    3,0 #A3c4d3ca3d
+--> 3,0 A #3c4d3ca3d
+--> 3,0 A 3,0 #c4d3ca3d
+--> 3,0 A 3,0 #4d3ca3d
+--> 3,0 A 3,0 4,0 #d3ca3d
+--> A 3,0 #3ca3d
+--> A 3,0 3,0 #ca3d
+--> A 3,0 A #a3d
+--> A 3,0 # 3c3c1-2c1=()5cCa3d* 3d
+--> A 3,0 3,0 #c3c1-2c1=()5cCa3d* 3d
+--> A 3,0 A #3c1-2c1=()5cCa3d* 3d
+--> A 3,0 A 3,0 #c1-2c1=()5cCa3d* 3d
+--> A 3,0 A 3,0 #1-2c1=()5cCa3d* 3d
+--> A 3,0 A 3,0 1,0 #-2c1=()5cCa3d* 3d
+--> A 3,0 A 2,0 #2c1=()5cCa3d* 3d
+--> A 3,0 A 2,0 2,0 #c1=()5cCa3d* 3d
+--> A 3,0 A 2,0 2,0 #1=()5cCa3d* 3d
+--> A 3,0 A 2,0 2,0 1,0 #=()5cCa3d* 3d
+--> A 3,0 A 2,0 1,0 #()5cCa3d* 3d
+--> A 3,0 A 2,0 1,0 () #5cCa3d* 3d
+--> A 3,0 A 2,0 1,0 () 5,0 #cCa3d* 3d
+--> A 3,0 A 2,0 1,0 () A #Ca3d* 3d
+--> A 3,0 A 2,0 1,0 () A C #a3d* 3d
+...
+--> A 3,0 A 2,0 A #a 3d* 3d
+--> A 3,0 A 2,0 # 3c3c1-2c1=()5cCa3d* 3d* 3d
+--> A 3,0 A 2,0 3,0 #c3c1-2c1=()5cCa3d* 3d* 3d
+--> A 3,0 A 2,0 A #3c1-2c1=()5cCa3d* 3d* 3d
+--> A 3,0 A 2,0 A 3,0 #c1-2c1=()5cCa3d* 3d* 3d
+--> A 3,0 A 2,0 A 2,0 #1-2c1=()5cCa3d* 3d* 3d
+--> A 3,0 A 2,0 A 2,0 1,0 #-2c1=()5cCa3d* 3d* 3d
+--> A 3,0 A 2,0 A 1,0 #2c1=()5cCa3d* 3d* 3d
+--> A 3,0 A 2,0 A 1,0 2,0 #c1=()5cCa3d* 3d* 3d
+--> A 3,0 A 2,0 A 1,0 1,0 #1=()5cCa3d* 3d* 3d
+--> A 3,0 A 2,0 A 1,0 1,0 1,0 #=()5cCa3d* 3d* 3d
+--> A 3,0 A 2,0 A 1,0 0,0 #()5cCa3d* 3d* 3d
+--> A 3,0 A 2,0 A 1,0 0,0 () #5cCa3d* 3d* 3d
+--> A 3,0 A 2,0 A 1,0 0,0 () 5,0 #cCa3d* 3d* 3d
+--> A 3,0 A 2,0 A 1,0 0,0 () A #Ca3d* 3d* 3d
+--> A 3,0 A 2,0 A 1,0 0,0 () A C #a3d* 3d* 3d
+...
+--> A 3,0 A 2,0 A 1,0 () #a3d* 3d* 3d
+--> A 3,0 A 2,0 A 1,0 # 3d* 3d* 3d
+--> A 3,0 A 2,0 A 1,0 3,0 #d* 3d* 3d
+--> A 3,0 A 2,0 1,0 #* 3d* 3d
+--> A 3,0 A 2,0 # 3d* 3d
+--> A 3,0 A 2,0 3,0 #d* 3d
+--> A 3,0 2,0 #* 3d
+--> A 6,0 # 3d
+--> A 6,0 3,0 #d
+--> 6,0 #
+</PRE>
+
+<H4>Testaufgabe:</H4>
+Entwerfen Sie (zum Testen des Taschenrechners) einen m&ouml;glichst kurzen und effizienten Ausdruck der entscheidet, ob eine am Stack stehende Zahl (gegen 0 gerundet) eine Primzahl ist oder nicht, und testen Sie mit mehreren, auch gr&ouml;&szlig;eren Zahlen.
+
+<H4>Zusatzaufgaben f&uuml;r Interessierte:</H4>
+Es stellt sich die Frage, ob man mit diesem Taschenrechner wirklich alles Programmieren kann.
+Ist es m&ouml;glich, damit eine Turing-Maschine zu bauen?
+Die L&ouml;sung dieser Zusatzaufgaben ist nicht verpflichtend und hat keinen Einflu&szlig; auf die Beurteilung.
+</DIV>
+
+<DIV class="leftmenu">
+<DL class="leftbuttons">
+  <DT><A href="http://www.complang.tuwien.ac.at/" title="Die Complang-Gruppe">Complang</A>
+  <DT><A href="http://www.complang.tuwien.ac.at/franz/" title="Franz Puntigam - TU Wien, Complang-Gruppe">Puntigam</A>
+  <DT>&nbsp;&nbsp;&nbsp;<A href="ueber" title="&Uuml;ber Franz Puntigam">&Uuml;ber&nbsp;mich</A>
+  <DT>&nbsp;&nbsp;&nbsp;<A href="research" title="Research of Franz Puntigam">Research</A>
+  <DT>&nbsp;&nbsp;&nbsp;<A href="lehre" title="Lehrangebot von Franz Puntigam">Lehre</A>
+  <DT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A href="lehre10s" title="Puntigams Lehrangebot im Sommersemester 2010">LVAs&nbsp;2010&nbsp;S</A>
+  <DT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A href="progspr10s" title="LVA 185.208: Programmiersprachen - VL&nbsp;2.0, 2010&nbsp;S">Prog.spr.</A>
+  <DT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<STRONG title="Kurzbezeichnung der aktuellen Seite">1.&nbsp;Aufgabe</STRONG>
+  <DT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A href="progspr10s2" title="2. &Uuml;bungsaufgabe - Programmiersprachen, 2010&nbsp;S">2.&nbsp;Aufgabe</A>
+  <DT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A href="foop10s" title="LVA 185.211: Fortgeschrittene objektorientierte Programmierung - VL&nbsp;2.0, 2010&nbsp;S">FOOP</A>
+  <DT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A href="lehre09w" title="Puntigams Lehrangebot im Wintersemester 2009/2010">LVAs&nbsp;2009&nbsp;W</A>
+  <DT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A href="lehre_alt" title="Puntigams Lehrangebot in fr&uuml;heren Semestern">fr&uuml;here&nbsp;Lehre</A>
+  <DT>&nbsp;&nbsp;&nbsp;<A href="links" title="Links">Links</A>
+</DL>
+</DIV>
+
+<DIV class="rightmenu">
+<DL class="rightbuttons">
+  <DT><A href="sitemap" title="&Uuml;berblick &uuml;ber die Seiten">Sitemap</A>
+  <DT><A href="kontakt" title="Kontakt zu Franz Puntigam">Kontakt</A>
+  <DT class="header">Schnellzugriff:
+  <DT><A href="progspr10s2" title="2. &Uuml;bungsaufgabe - Programmiersprachen, 2010&nbsp;S">n&auml;chste&nbsp;Aufgabe</A>
+</DL>
+</DIV>
+
+<DIV class="fi">
+<A href="http://www.informatik.tuwien.ac.at/" title="Fakult&auml;t f&uuml;r Informatik">
+  <IMG class="fi" alt="Fakult&auml;t f&uuml;r Informatik" src="http://www.complang.tuwien.ac.at/fi">
+</A>
+</DIV>
+
+<DIV class="tu">
+<A href="http://www.tuwien.ac.at/" title="Technische Universit&auml;t Wien">
+  <IMG class="tu" alt="Technische Universit&auml;t Wien" src="http://www.complang.tuwien.ac.at/tu">
+</A>
+</DIV>
+
+<ADDRESS>
+  <A href="#top" title="Anfang dieser Seite">Anfang</A> |
+  <A href="http://validator.w3.org/check/referer" title="&Uuml;berpr&uuml;fung dieser Seite auf syntaktische Korrektheit">HTML 4.01</A> |
+  letzte &Auml;nderung: 2010-03-18 (<A href="http://www.complang.tuwien.ac.at/franz/" title="Verantwortlich f&uuml;r letzte &Auml;nderung">Puntigam</A>)
+</ADDRESS>
+</BODY>
+</HTML>

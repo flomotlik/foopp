@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+               "http://www.w3.org/TR/html4/strict.dtd">
+<HTML lang="de">
+<HEAD>
+  <META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <LINK href="http://www.complang.tuwien.ac.at/complang.css" rel="stylesheet" type="text/css">
+  <LINK href="http://www.complang.tuwien.ac.at/favicon.ico" rel="shortcut icon" type="image/x-icon">
+  <LINK href="http://www.complang.tuwien.ac.at/franz/" rel="Start" type="text/html">
+  <TITLE>1. &Uuml;bungsaufgabe - Fortgeschrittene objektorientierte Programmierung, 2010 S</TITLE>
+</HEAD>
+
+<BODY id="top">
+<DIV class="logo">
+<A href="http://www.complang.tuwien.ac.at/" title="Die Complang-Gruppe">
+  <IMG class="logo" alt="Computer Languages" src="http://www.complang.tuwien.ac.at/logo">
+</A>
+</DIV>
+
+<DIV>
+<P class="rightquote">
+  Fortgeschrittene objektorientierte Programmierung<BR>
+   LVA 185.211, VL 2.0, 2010 S
+</P>
+<H1>1. &Uuml;bungsaufgabe</H1>
+Entwickeln Sie in einer stark typisierten objektorientierten Sprache Ihrer Wahl (z.B. C++, Java oder C#) ein Schlangenspiel (&auml;hnlich dem bekannten Spiel Snake, aber mit mehreren Schlangen, mehreren Spielern und auf mehrere Computer verteilt) entsprechend folgender Beschreibung:
+<P>
+Ein Spiel wird von einem Spieler auf einem Rechner gestartet, wobei ein Fenster mit MxN ann&auml;hernd quadratischen Feldern (M und N beim Aufruf festlegbar) am Bildschirm erscheint.
+Auf einem zuf&auml;llig gew&auml;hlten Feld befindet sich der Kopf der Schlange des Spielers mit zuf&auml;llig gew&auml;hlter Farbe (rot, gr&uuml;n oder blau).
+Zu Beginn besteht jede Schlange nur aus einem Kopf, der ein Feld belegt.
+Der Kopf bewegt sich nur dann in ein benachbartes Feld, wenn der Spieler eine Taste dr&uuml;ckt, welche die Bewegungsrichtung bestimmt.
+Jedes weitere Feld der Schlange folgt dem vorangegangenen Feld derselben Schlange.
+Tastendr&uuml;cke werden ignoriert, wenn sie den Schlangenkopf in Richtung des zweiten Feldes der Schlange bewegen w&uuml;rden; f&uuml;r weitere Felder der Schlange gilt das nicht.
+<P>
+In unregelm&auml;&szlig;igen Abst&auml;nden entstehen auf freien Feldern weitere zuf&auml;llig gef&auml;rbte Schlangenk&ouml;pfe, die sich selbst&auml;ndig bewegen und vom Computer nach einem Zufallsmuster gesteuert werden.
+Diese dienen als Futter, k&ouml;nnen aber auch feindlich sein.
+Auf Feldern, die direkt an ein Feld mit einem Schlangenkopf angrenzen, darf aber kein neuer Schlangenkopf entstehen.
+Wenn ein Schlangenkopf sich auf ein Feld bewegt, auf dem sich bereits ein Feld einer Schlange befindet, passiert Folgendes:
+<UL>
+<LI>Rote Schlangen (= Schlangenk&ouml;pfe) fressen blaue Felder.
+<LI>Rote Schlangen, die &uuml;ber gr&uuml;ne Felder kriechen, werden gr&uuml;n.
+<LI>Blaue Schlangen fressen gr&uuml;ne Felder.
+<LI>Blaue Schlangen, die &uuml;ber rote Felder kriechen, werden rot.
+<LI>Gr&uuml;ne Schlangen fressen rote Felder.
+<LI>Gr&uuml;ne Schlangen, die &uuml;ber blaue Felder kriechen, werden blau.
+<LI>Gleichfarbige Felder sind giftig.
+</UL>
+Das bedeutet im Einzelnen:
+<UL>
+<LI>Wenn Schlange A ein Feld, das zur Schlange B geh&ouml;rt, frisst, dann w&auml;chst Schlange A um ein Feld, und das gefressene Feld verschwindet.
+  Falls dabei Schlange B in zwei Teile geteilt wird, bewegt sich nur mehr der vordere Teil von Schlange B (der Teil mit dem Kopf) weiter, der hintere Teil bleibt liegen, bis er gefressen wird.
+  Falls der Schlangenkopf selbst gefressen wird, ist Schlange B tot, und der hintere Teil bleibt liegen.
+  Teilweise umgef&auml;rbte Schlangen k&ouml;nnen auch eigene Felder fressen (siehe unten).
+<LI>Der Kopf einer Schlange darf nie ein Feld betreten, das dieselbe Farbe hat.
+  Der Versuch, die Schlange auf ein gleichfarbiges Feld zu bewegen, bewirkt eine Verk&uuml;rzung der Schlange um das hinterste Feld, und der vordere Teil der Schlange bleibt unver&auml;ndert.
+  Wir sagen, die Schlange vergiftet sich.
+  Falls die Schlange nur aus dem Kopf besteht, stirbt sie bei einer Vergiftung und verschwindet.
+<LI>Wenn Schlange A &uuml;ber ein Feld kriecht, das zur Schlange B geh&ouml;rt, und sich dabei umf&auml;rbt, dann bekommt der Teil von Schlange A, der &uuml;ber Schlange B liegt oder Schlange B bereits passiert hat, dieselbe Farbe wie das Feld von B.
+  Schlange A wird also schrittweise, St&uuml;ck f&uuml;r St&uuml;ck umgef&auml;rbt.
+  Der Umf&auml;rbeprozess geht auch dann weiter, wenn Schlange B das Feld, das diesen Prozess ausgel&ouml;st hat, bereits verlassen hat.
+  Abgesehen von der Umf&auml;rbung bleiben die Schlangen A und B unver&auml;ndert.
+  Falls der bereits umgef&auml;rbte Kopf von Schlange A sich in einem weiteren Schritt wieder in ein Feld bewegt, das zur Schlange B geh&ouml;rt, dann kommt es zu einer Vergiftung.
+<LI>W&auml;hrend des Umf&auml;rbens gibt es ein Feld, das zu zwei (oder mehr) Schlangen geh&ouml;rt.
+  Falls dieses Feld von einer weiteren Schlange gefressen wird, sind davon alle Schlangen, zu denen das Feld geh&ouml;rt, betroffen und alle restlichen Schlangenteile bleiben liegen (bis sie gefressen werden).
+</UL>
+<P>
+Weitere Spieler k&ouml;nnen sich jederzeit (remote) mit dem Spiel verbinden und bekommen ein gleiches Fenster wie der erste Spieler.
+Dabei entstehen auf zuf&auml;llig gew&auml;hlten freien Feldern (aber nicht in unmittelbarer Nachbarschaft zu bereits existierenden Schlangenk&ouml;pfen) neue zuf&auml;llig gef&auml;rbte Schlangenk&ouml;pfe, die von den neuen Spielern gesteuert werden.
+<P>
+Die Eigenschaften des Fensterrandes &auml;ndern sich w&auml;hrend des Spiels periodisch:
+<UL>
+<LI>Im Stop-Modus sind Bewegungen &uuml;ber den Fensterrand hinaus nicht m&ouml;glich, und entsprechende Tastendr&uuml;cke werden ignoriert.
+<LI>Im Gift-Modus hat der Versuch einer Bewegung &uuml;ber den Fensterrand hinaus denselben Effekt wie eine Vergiftung:
+  Die Schlange wird verk&uuml;rzt.
+<LI>Im Wrap-Modus bewegen sich Schlangen, die das Fenster an einem Rand verlassen, am gegen&uuml;berliegenden Rand wieder in das Fenster hinein.
+</UL>
+Der aktuelle Modus muss irgendwie angezeigt werden, und vor kurz bevorstehenden &Auml;nderungen soll es eine akustische oder optische Warnung geben.
+Alle vom Modus abh&auml;ngigen Einschr&auml;nkungen beziehen sich nur auf den Kopf der Schlange.
+Wenn der Kopf einer Schlange im Wrap-Modus auf die gegen&uuml;berliegende Seite gesprungen ist, dann kann der Rest der Schlange in jedem Modus folgen.
+<P>
+Das Spiel endet, wenn kein neuer Schlangenkopf mehr erzeugt werden kann, wenn also alle verbliebenen freien Felder an Felder mit Schlangenk&ouml;pfen angrenzen.
+Gewinner ist der Spieler, der am Ende die l&auml;ngste Schlange hat.
+Das kann auch der Computer sein.
+<P>
+Vor allem zur Fehlersuche ist es sinnvoll, wenn Spieler auf nur einem Rechner mehrere Fenster zum selben Spiel haben k&ouml;nnen und mehrere Schlangen &uuml;ber unterschiedliche Tasten bedienbar sind.
+<P>
+&Auml;nderungen der Aufgabenstellung mit dem Ziel, die Spielbarkeit oder grafische Darstellung zu verbessern, werden gerne akzeptiert.
+</DIV>
+
+<DIV class="leftmenu">
+<DL class="leftbuttons">
+  <DT><A href="http://www.complang.tuwien.ac.at/" title="Die Complang-Gruppe">Complang</A>
+  <DT><A href="http://www.complang.tuwien.ac.at/franz/" title="Franz Puntigam - TU Wien, Complang-Gruppe">Puntigam</A>
+  <DT>&nbsp;&nbsp;&nbsp;<A href="ueber" title="&Uuml;ber Franz Puntigam">&Uuml;ber&nbsp;mich</A>
+  <DT>&nbsp;&nbsp;&nbsp;<A href="research" title="Research of Franz Puntigam">Research</A>
+  <DT>&nbsp;&nbsp;&nbsp;<A href="lehre" title="Lehrangebot von Franz Puntigam">Lehre</A>
+  <DT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A href="lehre10s" title="Puntigams Lehrangebot im Sommersemester 2010">LVAs&nbsp;2010&nbsp;S</A>
+  <DT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A href="progspr10s" title="LVA 185.208: Programmiersprachen - VL&nbsp;2.0, 2010&nbsp;S">Prog.spr.</A>
+  <DT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A href="foop10s" title="LVA 185.211: Fortgeschrittene objektorientierte Programmierung - VL&nbsp;2.0, 2010&nbsp;S">FOOP</A>
+  <DT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<STRONG title="Kurzbezeichnung der aktuellen Seite">1.&nbsp;Aufgabe</STRONG>
+  <DT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A href="foop10s2" title="2. &Uuml;bungsaufgabe - Fortgeschrittene objektorientierte Programmierung, 2010 S">2.&nbsp;Aufgabe</A>
+  <DT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A href="lehre09w" title="Puntigams Lehrangebot im Wintersemester 2009/2010">LVAs&nbsp;2009&nbsp;W</A>
+  <DT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A href="lehre_alt" title="Puntigams Lehrangebot in fr&uuml;heren Semestern">fr&uuml;here&nbsp;Lehre</A>
+  <DT>&nbsp;&nbsp;&nbsp;<A href="links" title="Links">Links</A>
+</DL>
+</DIV>
+
+<DIV class="rightmenu">
+<DL class="rightbuttons">
+  <DT><A href="sitemap" title="&Uuml;berblick &uuml;ber die Seiten">Sitemap</A>
+  <DT><A href="kontakt" title="Kontakt zu Franz Puntigam">Kontakt</A>
+  <DT class="header">Schnellzugriff:
+  <DT><A href="foop10s2" title="2. &Uuml;bungsaufgabe - Fortgeschrittene objektorientierte Programmierung, 2010 S">n&auml;chste&nbsp;Aufgabe</A>
+</DL>
+</DIV>
+
+<DIV class="fi">
+<A href="http://www.informatik.tuwien.ac.at/" title="Fakult&auml;t f&uuml;r Informatik">
+  <IMG class="fi" alt="Fakult&auml;t f&uuml;r Informatik" src="http://www.complang.tuwien.ac.at/fi">
+</A>
+</DIV>
+
+<DIV class="tu">
+<A href="http://www.tuwien.ac.at/" title="Technische Universit&auml;t Wien">
+  <IMG class="tu" alt="Technische Universit&auml;t Wien" src="http://www.complang.tuwien.ac.at/tu">
+</A>
+</DIV>
+
+<ADDRESS>
+  <A href="#top" title="Anfang dieser Seite">Anfang</A> |
+  <A href="http://validator.w3.org/check/referer" title="&Uuml;berpr&uuml;fung dieser Seite auf syntaktische Korrektheit">HTML 4.01</A> |
+  letzte &Auml;nderung: 2010-03-18 (<A href="http://www.complang.tuwien.ac.at/franz/" title="Verantwortlich f&uuml;r letzte &Auml;nderung">Puntigam</A>)
+</ADDRESS>
+</BODY>
+</HTML>
