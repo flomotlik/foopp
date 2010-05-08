@@ -1,4 +1,4 @@
-package at.tuwien.foop.snake;
+package at.tuwien.foop.snake.interfaces;
 
 public interface Element {
     public Coordinates getCoordinates();
