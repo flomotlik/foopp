@@ -4,4 +4,6 @@ public interface Element {
     public Coordinates getCoordinates();
 
     public Colour getColour();
+
+    public boolean intersects(Element element);
 }
