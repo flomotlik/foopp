@@ -25,29 +25,47 @@ public class SnakeImplTest {
         Mockito.when(
             game.nextCoordinates(Mockito.any(Direction.class), Mockito.any(Direction.class), Mockito
                 .any(Coordinates.class))).thenReturn(new CoordinatesImpl(2, 2), new CoordinatesImpl(3, 3),
-            new CoordinatesImpl(4, 4), new CoordinatesImpl(5, 5));
+            new CoordinatesImpl(4, 4), new CoordinatesImpl(5, 5), new CoordinatesImpl(6, 6));
 
         Mockito.when(client.nextDirection()).thenReturn(Direction.UP);
     }
 
     @Test
     public void ingestByRedSnake() {
-        final Snake snake = new SnakeImpl(new CoordinatesImpl(1, 1), Colour.RED, game, client, strategy);
-        snake.ingest(new ElementImpl(new CoordinatesImpl(1, 1), Colour.BLUE));
+        this.ingestBySnake(Colour.RED, Colour.BLUE, Colour.GREEN);
+    }
 
-        checkColour(snake.getElements(), Colour.RED);
+    @Test
+    public void ingestByBlueSnake() {
+        this.ingestBySnake(Colour.BLUE, Colour.GREEN, Colour.RED);
+    }
+
+    @Test
+    public void ingestByGreenSnake() {
+        this.ingestBySnake(Colour.GREEN, Colour.RED, Colour.BLUE);
+    }
+
+    private void ingestBySnake(Colour primary, Colour toEat, Colour toPassOnTo) {
+        System.out.println("Check for " + primary + "-----------------------");
+        final Snake snake = new SnakeImpl(new CoordinatesImpl(1, 1), primary, game, client, strategy);
+        snake.ingest(new ElementImpl(new CoordinatesImpl(1, 1), toEat));
+
+        checkColour(snake.getElements(), primary);
 
         snake.move();
-        checkColour(snake.getElements(), Colour.RED, Colour.RED);
+        checkColour(snake.getElements(), primary, primary);
 
-        snake.ingest(new ElementImpl(new CoordinatesImpl(1, 1), Colour.GREEN));
+        snake.ingest(new ElementImpl(new CoordinatesImpl(0, 0), primary));
         snake.move();
 
-        checkColour(snake.getElements(), Colour.GREEN, Colour.RED, Colour.RED);
+        checkColour(snake.getElements(), primary);
+
+        snake.ingest(new ElementImpl(new CoordinatesImpl(1, 1), toPassOnTo));
         snake.move();
-        checkColour(snake.getElements(), Colour.GREEN, Colour.GREEN, Colour.RED);
+
+        checkColour(snake.getElements(), toPassOnTo, primary);
         snake.move();
-        checkColour(snake.getElements(), Colour.GREEN, Colour.GREEN, Colour.GREEN);
+        checkColour(snake.getElements(), toPassOnTo, toPassOnTo);
     }
 
     @Test
