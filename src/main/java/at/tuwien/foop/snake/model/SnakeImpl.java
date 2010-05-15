@@ -14,6 +14,7 @@ import at.tuwien.foop.snake.interfaces.Element;
 import at.tuwien.foop.snake.interfaces.Game;
 import at.tuwien.foop.snake.interfaces.Intersection;
 import at.tuwien.foop.snake.interfaces.Snake;
+import at.tuwien.foop.snake.interfaces.Strategy;
 
 public class SnakeImpl implements Snake {
 
@@ -29,10 +30,13 @@ public class SnakeImpl implements Snake {
 
     private Element ingestOnNextMove = null;
 
-    public SnakeImpl(Coordinates coordinates, Colour colour, Game game, Client client) {
+    private final Strategy strategy;
+
+    public SnakeImpl(Coordinates coordinates, Colour colour, Game game, Client client, Strategy strategy) {
         this.elements.add(new ElementImpl(coordinates, colour));
         this.game = game;
         this.client = client;
+        this.strategy = strategy;
     }
 
     @Override
@@ -80,16 +84,20 @@ public class SnakeImpl implements Snake {
         Coordinates newCoordinates = this.game.nextCoordinates(this.lastDirection, newDirection, this.getHead()
             .getCoordinates());
         if (this.ingestOnNextMove != null) {
-            this.elements.add(0, new ElementImpl(newCoordinates, this.getHead().getColour()));
+            Colour colour = this.strategy.decideOnColour(this.getHead().getColour(), this.ingestOnNextMove.getColour());
+            this.elements.add(0, new ElementImpl(newCoordinates, colour));
+            this.ingestOnNextMove = null;
         } else {
             if (newCoordinates.equals(this.getHead().getCoordinates())) {
                 this.elements.remove(this.elements.size() - 1);
             } else {
                 Element elementToMove = null;
+                Colour colourToPassOnTo = this.getHead().getColour();
                 for (int i = 0; i < this.elements.size(); i++) {
                     elementToMove = this.elements.get(i);
-                    this.elements.set(i, new ElementImpl(newCoordinates, elementToMove.getColour()));
+                    this.elements.set(i, new ElementImpl(newCoordinates, colourToPassOnTo));
                     newCoordinates = elementToMove.getCoordinates();
+                    colourToPassOnTo = elementToMove.getColour();
                 }
             }
         }
