@@ -84,8 +84,16 @@ public class SnakeImpl implements Snake {
         Coordinates newCoordinates = this.game.nextCoordinates(this.lastDirection, newDirection, this.getHead()
             .getCoordinates());
         if (this.ingestOnNextMove != null) {
-            Colour colour = this.strategy.decideOnColour(this.getHead().getColour(), this.ingestOnNextMove.getColour());
-            this.elements.add(0, new ElementImpl(newCoordinates, colour));
+            if (this.ingestOnNextMove.getColour() == this.getHead().getColour()) {
+                this.elements.remove(this.elements.size() - 1);
+                if (this.elements.size() == 0) {
+                    this.dead = true;
+                }
+            } else {
+                Colour colour = this.strategy.decideOnColour(this.getHead().getColour(), this.ingestOnNextMove
+                    .getColour());
+                this.elements.add(0, new ElementImpl(newCoordinates, colour));
+            }
             this.ingestOnNextMove = null;
         } else {
             if (newCoordinates.equals(this.getHead().getCoordinates())) {
