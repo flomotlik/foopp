@@ -5,13 +5,13 @@ import java.util.Iterator;
 public interface Snake {
     public Iterator<Element> getElements();
 
-    public Intersection cut(Snake snake);
+    public Intersection cut(Element head);
 
     public int size();
 
     public void ingest(Element toIngest);
 
-    public boolean isDead();
+    public boolean isAlive();
 
     public Element getHead();
 

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import at.tuwien.foop.snake.interfaces.Client;
 import at.tuwien.foop.snake.interfaces.Colour;
@@ -18,9 +17,9 @@ import at.tuwien.foop.snake.interfaces.Strategy;
 
 public class SnakeImpl implements Snake {
 
-    private boolean dead;
+    private boolean alive = true;
 
-    private final List<ElementImpl> elements = new ArrayList<ElementImpl>();
+    private List<Element> elements = new ArrayList<Element>();
 
     private final Game game;
 
@@ -39,18 +38,37 @@ public class SnakeImpl implements Snake {
         this.strategy = strategy;
     }
 
+    public SnakeImpl(List<Element> elementsAfterIntersection, Strategy strategy) {
+        this.elements = new ArrayList<Element>(elementsAfterIntersection);
+        this.strategy = strategy;
+        this.client = null;
+        this.game = null;
+    }
+
     @Override
-    public Intersection cut(Snake snake) {
-        final Element head = snake.getHead();
-        final Iterator<Element> elements = this.getElements();
+    public Intersection cut(final Element head) {
         Element next = null;
         for (int i = 0; i < this.size(); i++) {
             next = this.elements.get(i);
-            if (head.intersects(next)) {
-                return new IntersectionImpl(new ElementIterator(elements.next()), next, true);
+            if (head.atSamePosition(next) && head != next) {
+                Intersection intersection = null;
+                if (this.strategy.eats(head.getColour(), next.getColour())) {
+                    intersection = new IntersectionImpl(
+                        new ArrayList<Element>(elements.subList(i + 1, elements.size())), next, true);
+                    this.elements = new ArrayList<Element>(this.elements.subList(0, i));
+                    checkAlive();
+                } else {
+                    intersection = new IntersectionImpl(new ArrayList<Element>(), next, true);
+                }
+                return intersection;
+
             }
         }
         return IntersectionImpl.noIntersection();
+    }
+
+    private void checkAlive() {
+        this.alive = this.elements.size() > 0;
     }
 
     @Override
@@ -64,8 +82,8 @@ public class SnakeImpl implements Snake {
     }
 
     @Override
-    public boolean isDead() {
-        return this.dead;
+    public boolean isAlive() {
+        return this.alive;
     }
 
     @Override
@@ -80,15 +98,18 @@ public class SnakeImpl implements Snake {
 
     @Override
     public void move() {
-        final Direction newDirection = this.client.nextDirection();
+        Direction newDirection = this.client.nextDirection();
+        if (newDirection.isOpposite(this.lastDirection)) {
+            newDirection = lastDirection;
+        } else {
+            this.lastDirection = newDirection;
+        }
         Coordinates newCoordinates = this.game.nextCoordinates(this.lastDirection, newDirection, this.getHead()
             .getCoordinates());
         if (this.ingestOnNextMove != null) {
             if (this.ingestOnNextMove.getColour() == this.getHead().getColour()) {
                 this.elements.remove(this.elements.size() - 1);
-                if (this.elements.size() == 0) {
-                    this.dead = true;
-                }
+                checkAlive();
             } else {
                 Colour colour = this.strategy.decideOnColour(this.getHead().getColour(), this.ingestOnNextMove
                     .getColour());
@@ -108,43 +129,6 @@ public class SnakeImpl implements Snake {
                     colourToPassOnTo = elementToMove.getColour();
                 }
             }
-        }
-    }
-
-    private static class ElementIterator implements Iterator<Element> {
-
-        private Element formerHead = null;
-
-        private Element head = null;
-
-        public ElementIterator(Element head) {
-            this.head = head;
-        }
-
-        @Override
-        public boolean hasNext() {
-            if (head != null) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        @Override
-        public Element next() {
-            if (this.hasNext()) {
-                this.formerHead = this.head;
-                // this.head = this.head.followingElement();
-                return this.formerHead;
-            } else {
-                throw new NoSuchElementException();
-            }
-
-        }
-
-        @Override
-        public void remove() {
-            // this.formerHead.cutAfterThis();
         }
     }
 }

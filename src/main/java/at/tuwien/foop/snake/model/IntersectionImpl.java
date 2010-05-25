@@ -1,17 +1,17 @@
 package at.tuwien.foop.snake.model;
 
-import java.util.Iterator;
+import java.util.List;
 
 import at.tuwien.foop.snake.interfaces.Element;
 import at.tuwien.foop.snake.interfaces.Intersection;
 
 public class IntersectionImpl implements Intersection {
 
-    private Iterator<Element> elementsAfterIntersection;
+    private List<Element> elementsAfterIntersection;
     private Element intersection;
     private boolean intersects;
 
-    public IntersectionImpl(Iterator<Element> elementsAfterIntersection, Element intersection, boolean intersects) {
+    public IntersectionImpl(List<Element> elementsAfterIntersection, Element intersection, boolean intersects) {
         super();
         this.elementsAfterIntersection = elementsAfterIntersection;
         this.intersection = intersection;
@@ -19,7 +19,7 @@ public class IntersectionImpl implements Intersection {
     }
 
     @Override
-    public Iterator<Element> getElementsAfterIntersection() {
+    public List<Element> getElementsAfterIntersection() {
         return this.elementsAfterIntersection;
     }
 

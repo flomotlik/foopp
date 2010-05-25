@@ -27,7 +27,7 @@ public class ElementImpl implements Element {
     }
 
     @Override
-    public boolean intersects(Element element) {
+    public boolean atSamePosition(Element element) {
         return this.coordinates.equals(element.getCoordinates());
     }
 }

@@ -5,5 +5,5 @@ public interface Element {
 
     public Colour getColour();
 
-    public boolean intersects(Element element);
+    public boolean atSamePosition(Element element);
 }
