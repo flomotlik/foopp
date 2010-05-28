@@ -17,8 +17,8 @@ public class SnakeWindowTest {
      * @throws InterruptedException
      */
     public static void main(String[] args) throws InterruptedException {
-        int width = 2;
-        int height = 2;
+        int width = 10;
+        int height = 10;
         SnakeWindow wnd = new SnakeWindow(height, width);
         wnd.setVisible(true);
 
@@ -35,11 +35,17 @@ public class SnakeWindowTest {
             }
         };
         final GameImpl impl = new GameImpl(width, height);
-        impl.addSnake(Colour.RED, client);
-        while (true) {
-            System.out.println("Setting Game Data");
-            wnd.setGameData(0, 0, impl.nextMove());
-            Thread.sleep(500);
+
+        for (int i = 0; i < 10; i++) {
+            impl.addSnake(randomColour(), client);
         }
+        while (true) {
+            wnd.setGameData(0, 0, impl.nextMove());
+            Thread.sleep(2000);
+        }
+    }
+
+    public static Colour randomColour() {
+        return Colour.values()[new Random().nextInt(Colour.values().length)];
     }
 }
