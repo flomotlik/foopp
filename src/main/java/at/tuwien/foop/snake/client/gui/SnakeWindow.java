@@ -10,7 +10,7 @@ public class SnakeWindow extends JFrame {
 	
 	// TODO just for debugging, remove later
 	public static void main(String[] args) {
-		SnakeWindow wnd = new SnakeWindow();
+		SnakeWindow wnd = new SnakeWindow(10,10);
 		wnd.setVisible(true);
 		
 		// flo's code goes here :)
@@ -18,15 +18,14 @@ public class SnakeWindow extends JFrame {
 		wnd.setGameData(0, 0, gameData);
 	}
 	
-	public SnakeWindow() {
+	public SnakeWindow(int height, int width) {
 		super("Snake");
 		this.setLocation(400, 200);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
-		this.display = new PlayingField(10, 10);
+		this.display = new PlayingField(width, height);
 		this.add(this.display);
 		this.pack();
-		
 	}
 	
 	public void setGameData(int x, int y, Colour[][] gameData) {

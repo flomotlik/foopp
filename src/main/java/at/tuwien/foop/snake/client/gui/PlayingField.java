@@ -54,6 +54,9 @@ public class PlayingField extends Canvas {
 	 * @return
 	 */
 	public static Color getColor(Colour c) {
+	    if(c == null){
+	        return Color.WHITE;
+	    }
 		switch (c) {
 		case RED:
 			return Color.RED;
