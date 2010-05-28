@@ -31,6 +31,7 @@ public class PlayingField extends Canvas {
 	// TODO currentBorderMode and nextBorderMode don't do anything at the moment, give them any value
 	public void setGameData(int currentBorderMode, int nextBorderMode, Colour[][] gameData) {
 		this.gameData = gameData;
+		this.repaint();
 	}
 	
 	@Override
@@ -40,7 +41,7 @@ public class PlayingField extends Canvas {
 			for (int j = 0; j < this.height; j++) {
 				g.setColor(Color.BLACK);
 				g.drawRect(PlayingField.margin+i*(PlayingField.margin+PlayingField.elementSize), PlayingField.margin+j*(PlayingField.margin+PlayingField.elementSize), PlayingField.elementSize, PlayingField.elementSize);
-				if (gameData != null) {
+				if (this.gameData != null) {
 					g.setColor(PlayingField.getColor(gameData[i][j]));
 					g.fillRect(PlayingField.margin+i*(PlayingField.margin+PlayingField.elementSize), PlayingField.margin+j*(PlayingField.margin+PlayingField.elementSize), PlayingField.elementSize, PlayingField.elementSize);
 				}
