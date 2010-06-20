@@ -60,7 +60,7 @@ public class SnakeServer extends Thread {
 				Queue<ClientHandler> newClients = this.clientListener.getNewClients();
 				ClientHandler newClient;
 				while ((newClient = newClients.poll()) != null) {
-					this.game.addSnake(Colour.RED, newClient);
+					this.game.addSnake(newClient);
 					this.clients.add(newClient);
 				}
 				long elapsed = System.currentTimeMillis() - this.lastTime;
