@@ -7,4 +7,6 @@ public interface Game {
     public Colour[][] nextMove();
 
     public void addSnake(Colour colour, Client client);
+
+    void addSnake(Client client);
 }

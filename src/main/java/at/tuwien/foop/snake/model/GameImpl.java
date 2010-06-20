@@ -139,6 +139,17 @@ public class GameImpl implements Game {
         this.addSnake(new SnakeImpl(new CoordinatesImpl(randomWidth, randomHeight), colour, this, client,
             new StandardStrategy()));
     }
+    
+    @Override
+    public void addSnake(Client client) {
+        Colour[] values = Colour.values();
+        Random random = new Random();
+        Colour colour = values[random.nextInt(values.length)];
+        int randomWidth = new Random().nextInt(this.width);
+        int randomHeight = new Random().nextInt(this.heigth);
+        this.addSnake(new SnakeImpl(new CoordinatesImpl(randomWidth, randomHeight), colour, this, client,
+            new StandardStrategy()));
+    }
 
     public void addSnake(Snake snake) {
         this.snakes.add(snake);
