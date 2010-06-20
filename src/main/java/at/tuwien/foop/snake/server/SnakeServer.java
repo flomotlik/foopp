@@ -2,7 +2,8 @@ package at.tuwien.foop.snake.server;
 
 import java.io.IOException;
 import java.net.SocketException;
-import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
@@ -12,9 +13,15 @@ import at.tuwien.foop.snake.model.GameImpl;
 
 public class SnakeServer extends Thread {
 
+	public static void main(String[] args) throws IOException {
+		// TODO parse args[] for size of game area
+		SnakeServer s = new SnakeServer(30, 15);
+		s.start();
+	}
+	
 	private ClientListener clientListener;
 	
-	private List<ClientHandler> clients = new ArrayList<ClientHandler>();
+	private List<ClientHandler> clients = new LinkedList<ClientHandler>();
 	
 	private long lastTime;
 	
@@ -27,28 +34,25 @@ public class SnakeServer extends Thread {
 		this.clientListener = new ClientListener(12349);
 		this.game = new GameImpl(width, height);
 	}
-	
-	public static void main(String[] args) throws IOException {
-		// TODO parse args[] for size of game area
-		SnakeServer s = new SnakeServer(30, 15);
-		s.start();
-	}
-	
+		
 	public void run() {
 		System.out.println("SnakeServer starting up..");
 		this.clientListener.start();
 		try {
 			this.lastTime = System.currentTimeMillis();
 			do {
-				// TODO iterate one step
 				System.out.println("TICK");
 				Colour data[][] = this.game.nextMove();
-				for (ClientHandler client : this.clients) {
+				// we need the iterator explicitly to be able to remove dropped clients
+				Iterator<ClientHandler> i = this.clients.iterator();
+				while (i.hasNext()) {
+					ClientHandler client = i.next();
 					try {
 						client.updateGameData(data);
 					} catch (SocketException e) {
 						e.printStackTrace();
-						// TODO kick client!
+						i.remove();
+						client.disconnect();
 					}
 				}
 				
@@ -79,9 +83,9 @@ public class SnakeServer extends Thread {
 		
 		this.clientListener.close();
 		
-		// TODO get rid of all clients
 		for (ClientHandler client : this.clients) {
-			// TODO
+			client.disconnect();
+			// emptying list not necessary
 		}
 	}
 

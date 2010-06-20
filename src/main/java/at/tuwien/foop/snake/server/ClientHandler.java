@@ -16,31 +16,50 @@ public class ClientHandler implements Client {
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
 	
+	private Direction currentDirection;
+	
 	public ClientHandler(Socket client) throws IOException {
 		this.client = client;
 		this.out = new ObjectOutputStream(this.client.getOutputStream());
 		this.in = new ObjectInputStream(this.client.getInputStream());
+		// starting-direction
+		this.currentDirection = Direction.RIGHT;
+	}
+	
+	// shut down all sockets
+	public void disconnect() {
+		try {
+			this.out.close();
+		} catch (IOException e) {
+		}
+		try {
+			this.in.close();
+		} catch (IOException e) {
+		}
+		try {
+			this.client.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println("Client " + this.client + " disconnected!");
 	}
 	
 	// returns the move or action sent by this client
 	@Override
 	public Direction nextDirection() {
-		Direction move = Direction.NONE;
 		// TODO maybe make this even less prone to blocking by constantly reading in its own thread
-		
 		// take the last direction that was transmitted within the last cycle
 		try {
 			while (this.in.available() > 0) {
-				move = (Direction) this.in.readObject();
+				currentDirection = (Direction) this.in.readObject();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		System.out.println("Move reported by client " + this.client + " is: " + move);
-		return Direction.LEFT;
-//		return move;
+		System.out.println("Move reported by client " + this.client + " is: " + currentDirection);
+		return currentDirection;
 	}
 	
 	// TODO border-type

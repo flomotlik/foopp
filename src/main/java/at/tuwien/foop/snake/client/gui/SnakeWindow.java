@@ -12,6 +12,8 @@ import at.tuwien.foop.snake.interfaces.Direction;
 
 public class SnakeWindow extends JFrame {
 	
+	private static final long serialVersionUID = 8641067741490473606L;
+
 	private SnakeClient client;
 
 	private PlayingField display;
@@ -22,10 +24,6 @@ public class SnakeWindow extends JFrame {
 		wnd.setVisible(true);
 		
 		wnd.connect("localhost", 12349);
-		
-		// flo's code goes here :)
-		Colour[][] gameData = null;
-		wnd.setGameData(0, 0, gameData);
 	}
 	
 	public SnakeWindow(int height, int width) {
@@ -37,26 +35,30 @@ public class SnakeWindow extends JFrame {
 		this.add(this.display);
 		this.pack();
 		
-		// TODO add keylisteners
 		this.addKeyListener(new KeyListener() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				System.out.println("Key pressed: " + e.getKeyCode());
 				try {
-				switch (e.getKeyCode()) {
-				case KeyEvent.VK_DOWN:
-					client.setNextMove(Direction.DOWN);
-				case KeyEvent.VK_UP:
-					client.setNextMove(Direction.UP);
-				case KeyEvent.VK_LEFT:
-					client.setNextMove(Direction.LEFT);
-				case KeyEvent.VK_RIGHT:
-					client.setNextMove(Direction.RIGHT);
-				default:
-				}
-				} catch (IOException ex) {
-					ex.printStackTrace();
-				}
+					switch (e.getKeyCode()) {
+					case KeyEvent.VK_DOWN:
+						client.setNextMove(Direction.DOWN);
+						break;
+					case KeyEvent.VK_UP:
+						client.setNextMove(Direction.UP);
+						break;
+					case KeyEvent.VK_LEFT:
+						client.setNextMove(Direction.LEFT);
+						break;
+					case KeyEvent.VK_RIGHT:
+						client.setNextMove(Direction.RIGHT);
+						break;
+					default:
+						break;
+					}
+					} catch (IOException ex) {
+						ex.printStackTrace();
+					}
 			}
 			@Override
 			public void keyReleased(KeyEvent e) {
