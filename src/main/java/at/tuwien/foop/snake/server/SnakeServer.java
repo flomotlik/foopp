@@ -12,6 +12,8 @@ import at.tuwien.foop.snake.interfaces.Game;
 import at.tuwien.foop.snake.model.GameImpl;
 
 public class SnakeServer extends Thread {
+	
+	public static int DEFAULTPORT = 12349;
 
 	public static void main(String[] args) throws IOException {
 		// TODO parse args[] for size of game area

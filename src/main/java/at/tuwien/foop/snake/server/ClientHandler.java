@@ -22,12 +22,17 @@ public class ClientHandler implements Client {
 		this.client = client;
 		this.out = new ObjectOutputStream(this.client.getOutputStream());
 		this.in = new ObjectInputStream(this.client.getInputStream());
+		// send out size of playing field
+		this.out.writeInt(10);
+		this.out.writeInt(10);
+		this.out.flush();
 		// starting-direction
 		this.currentDirection = Direction.RIGHT;
 	}
 	
 	// shut down all sockets
 	public void disconnect() {
+		this.currentDirection = Direction.NONE;
 		try {
 			this.out.close();
 		} catch (IOException e) {
@@ -47,19 +52,20 @@ public class ClientHandler implements Client {
 	// returns the move or action sent by this client
 	@Override
 	public Direction nextDirection() {
-		// TODO maybe make this even less prone to blocking by constantly reading in its own thread
 		// take the last direction that was transmitted within the last cycle
 		try {
 			while (this.in.available() > 0) {
-				currentDirection = (Direction) this.in.readObject();
+				this.currentDirection = (Direction) this.in.readObject();
 			}
 		} catch (IOException e) {
+			this.currentDirection = Direction.NONE;
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
+			this.currentDirection = Direction.NONE;
 			e.printStackTrace();
 		}
-		System.out.println("Move reported by client " + this.client + " is: " + currentDirection);
-		return currentDirection;
+		System.out.println("Move reported by client " + this.client + " is: " + this.currentDirection);
+		return this.currentDirection;
 	}
 	
 	// TODO border-type

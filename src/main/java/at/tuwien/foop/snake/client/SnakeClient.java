@@ -1,5 +1,6 @@
 package at.tuwien.foop.snake.client;
 
+import java.awt.Dimension;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -14,6 +15,8 @@ public class SnakeClient {
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
 	
+	private Dimension playingFieldSize;
+	
 	public SnakeClient(String host, int port) throws IOException {
 		System.out.println("Connecting to " + host + ":" + port);
 		this.socket = new Socket(host, port);
@@ -21,25 +24,23 @@ public class SnakeClient {
 		this.out = new ObjectOutputStream(this.socket.getOutputStream());
 		this.in = new ObjectInputStream(this.socket.getInputStream());
 		
-		// TODO read size of playing field!
+		// read size of playing field!
+		this.playingFieldSize = new Dimension(this.in.readInt(), this.in.readInt());
+	}
+	
+	public Dimension getPlayingFieldSize() {
+		return this.playingFieldSize;
 	}
 	
 	public void setNextMove(Direction move) throws IOException {
 		System.out.println("Sending move " + move + " to Server");
 		this.out.writeObject(move);
+		this.out.flush();
 	}
 	
 	// this call blocks!
-	public Colour[][] getGameData() {
-		try {
-//			System.out.println("Receiving new game data..");
-			return (Colour[][]) this.in.readObject();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		return null;
+	public Colour[][] getGameData() throws IOException, ClassNotFoundException {
+		return (Colour[][]) this.in.readObject();
 	}
 
 }

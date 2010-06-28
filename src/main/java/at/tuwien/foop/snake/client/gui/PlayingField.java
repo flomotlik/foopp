@@ -7,25 +7,25 @@ import java.awt.Graphics;
 
 import at.tuwien.foop.snake.interfaces.Colour;
 
-// TODO name Canvas
+// the PlayingField-Canvas
 public class PlayingField extends Canvas {
+	
+	private static final long serialVersionUID = -118286530438632278L;
 	
 	private static int elementSize = 15;
 	private static int margin = 3;
 	
-	private int width;
-	private int height;
+	private Dimension size;
 	private Colour[][] gameData;
 	
 	// TODO maybe make this class more observer-like?
-	public PlayingField(int width, int height) {
-		this.width = width;
-		this.height = height;
+	public PlayingField(Dimension size) {
+		this.size = size;
 		this.setBackground(Color.WHITE);
-		Dimension size = new Dimension(width*elementSize + (width+1)*margin, height*elementSize + (height+1)*margin);
-		this.setMinimumSize(size);
-		this.setMaximumSize(size);
-		this.setPreferredSize(size);
+		Dimension pixelSize = new Dimension(size.width*elementSize + (size.width+1)*margin, size.height*elementSize + (size.height+1)*margin);
+		this.setMinimumSize(pixelSize);
+		this.setMaximumSize(pixelSize);
+		this.setPreferredSize(pixelSize);
 	}
 	
 	// TODO currentBorderMode and nextBorderMode don't do anything at the moment, give them any value
@@ -37,8 +37,8 @@ public class PlayingField extends Canvas {
 	@Override
 	public void paint(Graphics g) {
 		// TODO border
-		for (int i = 0; i < this.width; i++) {
-			for (int j = 0; j < this.height; j++) {
+		for (int i = 0; i < this.size.width; i++) {
+			for (int j = 0; j < this.size.height; j++) {
 				g.setColor(Color.BLACK);
 				g.drawRect(PlayingField.margin+i*(PlayingField.margin+PlayingField.elementSize), PlayingField.margin+j*(PlayingField.margin+PlayingField.elementSize), PlayingField.elementSize, PlayingField.elementSize);
 				if (this.gameData != null) {
