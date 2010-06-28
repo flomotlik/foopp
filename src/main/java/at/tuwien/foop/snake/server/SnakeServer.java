@@ -16,8 +16,25 @@ public class SnakeServer extends Thread {
 	public static int DEFAULTPORT = 12349;
 
 	public static void main(String[] args) throws IOException {
-		// TODO parse args[] for size of game area
-		SnakeServer s = new SnakeServer(30, 15);
+		// default size
+		int width = 10;
+		int height = 10;
+		// parse args[] for other size of game area
+		switch (args.length) {
+			case 0:
+				break;
+			case 1:
+				width = Integer.parseInt(args[0]);
+				height = width;
+				break;
+			case 2:
+				width = Integer.parseInt(args[0]);
+				height = Integer.parseInt(args[1]);
+				break;
+			default:
+				throw new IllegalArgumentException();
+		}
+		SnakeServer s = new SnakeServer(width, height);
 		s.start();
 	}
 	
@@ -33,7 +50,7 @@ public class SnakeServer extends Thread {
 	private Game game;
 	
 	public SnakeServer(int width, int height) throws IOException {
-		this.clientListener = new ClientListener(12349);
+		this.clientListener = new ClientListener(SnakeServer.DEFAULTPORT);
 		this.game = new GameImpl(width, height);
 	}
 		
@@ -62,6 +79,7 @@ public class SnakeServer extends Thread {
 				Queue<ClientHandler> newClients = this.clientListener.getNewClients();
 				ClientHandler newClient;
 				while ((newClient = newClients.poll()) != null) {
+					newClient.init(this.game.getWidth(), this.game.getHeight());
 					this.game.addSnake(newClient);
 					this.clients.add(newClient);
 				}

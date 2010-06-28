@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingWorker;
 
 import at.tuwien.foop.snake.client.SnakeClient;
 import at.tuwien.foop.snake.interfaces.Colour;
@@ -29,6 +30,7 @@ public class SnakeWindow extends JFrame {
 
 	private SnakeClient client;
 
+	private SwingWorker<Void,Void> game;
 	private PlayingField display;
 	
 	// start client window here
@@ -139,19 +141,28 @@ public class SnakeWindow extends JFrame {
 		this.client = new SnakeClient(host, port);
 		// get size of playing field
 		this.display = new PlayingField(this.client.getPlayingFieldSize());
-		this.remove(this.panel);
-		this.add(this.display);
-		this.pack();
-		try {
-			while (true) {
-				// TODO border-state
-				this.setGameData(0, 0, this.client.getGameData());
+		this.game = new SwingWorker<Void,Void>() {
+			@Override
+			protected Void doInBackground() throws Exception {
+				try {
+					remove(panel);
+					add(display);
+					pack();
+					while (true) {
+						// TODO border-state
+						setGameData(0, 0, client.getGameData());
+						repaint();
+					}
+				} finally {
+					// exception caught, back to insert connection data mode!
+					remove(display);
+					display = null;
+					add(panel);
+				}
 			}
-		} finally {
-			// exception caught, back to insert connection data mode!
-			this.remove(this.display);
-			this.display = null;
-		}
+			
+		};
+		this.game.execute();
 	}
 	
 	public void setGameData(int x, int y, Colour[][] gameData) {

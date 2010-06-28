@@ -49,6 +49,8 @@ public class GameImpl implements Game {
             case RIGHT:
                 newX++;
                 break;
+            case NONE:
+            	break;
             default:
                 throw new IllegalArgumentException();
         }
@@ -154,4 +156,14 @@ public class GameImpl implements Game {
     public void addSnake(Snake snake) {
         this.snakes.add(snake);
     }
+
+	@Override
+	public int getHeight() {
+		return this.heigth;
+	}
+
+	@Override
+	public int getWidth() {
+		return this.width;
+	}
 }

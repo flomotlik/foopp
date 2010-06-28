@@ -22,12 +22,15 @@ public class ClientHandler implements Client {
 		this.client = client;
 		this.out = new ObjectOutputStream(this.client.getOutputStream());
 		this.in = new ObjectInputStream(this.client.getInputStream());
-		// send out size of playing field
-		this.out.writeInt(10);
-		this.out.writeInt(10);
-		this.out.flush();
 		// starting-direction
 		this.currentDirection = Direction.RIGHT;
+	}
+	
+	public void init(int width, int height) throws IOException {
+		// send out size of playing field
+		this.out.writeInt(width);
+		this.out.writeInt(height);
+		this.out.flush();
 	}
 	
 	// shut down all sockets
