@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+               "http://www.w3.org/TR/html4/strict.dtd">
+<HTML lang="de">
+<HEAD>
+  <META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <LINK href="http://www.complang.tuwien.ac.at/complang.css" rel="stylesheet" type="text/css">
+  <LINK href="http://www.complang.tuwien.ac.at/favicon.ico" rel="shortcut icon" type="image/x-icon">
+  <LINK href="http://www.complang.tuwien.ac.at/franz/" rel="Start" type="text/html">
+  <TITLE>2. &Uuml;bungsaufgabe - Fortgeschrittene objektorientierte Programmierung, 2010 S</TITLE>
+</HEAD>
+
+<BODY id="top">
+<DIV class="logo">
+<A href="http://www.complang.tuwien.ac.at/" title="Die Complang-Gruppe">
+  <IMG class="logo" alt="Computer Languages" src="http://www.complang.tuwien.ac.at/logo">
+</A>
+</DIV>
+
+<DIV>
+<P class="rightquote">
+  Fortgeschrittene objektorientierte Programmierung<BR>
+   LVA 185.211, VL 2.0, 2010 S
+</P>
+<H1>2. &Uuml;bungsaufgabe</H1>
+Lernen Sie Eiffel und entwickeln Sie ein Programm in Eiffel (siehe unten).
+Ziel der Aufgabe ist das Sammeln von Erfahrungen zu
+<UL>
+<LI>dynamisch &uuml;berpr&uuml;ften Zusicherungen und
+<LI>kovarianten Eingangsparametertypen und <Q>CAT calls</Q>.
+</UL>
+Umfangreiche Informationen zur Programmiersprache Eiffel (Tutorials, B&uuml;cher, Beispiele, etc.) finden Sie unter dem <A class="intext" href="http://www.cetus-links.org/oo_eiffel.html">Cetus-Link zu Eiffel</A>.
+Zur L&ouml;sung der &Uuml;bungsaufgabe verwenden Sie am besten ISE-Eiffel.
+
+<H4>ISE-Eiffel:</H4>
+Die Firma ISE wurde von Bertrand Meyer, dem Entwickler von Eiffel, gegr&uuml;ndet und vertreibt vor allem Eiffel-Produkte und Support.
+Die Eiffel-Entwicklungsumgebung von ISE, <A class="intext" href="http://www.eiffel.com/products/studio/">EiffelStudio</A>, &auml;hnelt VisualStudio und ist f&uuml;r die Entwicklung von open source Software auf vielen Plattformen frei verf&uuml;gbar.
+Die kommerzielle Version unterscheidet sich davon nur in den Lizenzvereinbarungen und im Support.
+Sowohl zu EiffelStudio als auch zu Eiffel selbst finden Sie umfangreiche <A class="intext" href="http://docs.eiffel.com/">online Dokumentation</A>.
+
+<H4>SmartEiffel:</H4>
+Neben ISE-Eiffel gibt es auch <A class="intext" href="http://smarteiffel.loria.fr/index.html">SmartEiffel</A>, das als GNU-Projekt entwickelt wurde, um neben dem (damals ausschlie&szlig;lich) kommerziellen ISE-Eiffel auch ein frei verf&uuml;gbares open source Eiffel zu haben.
+F&uuml;r den Zweck dieser &Uuml;bung reicht SmartEiffel aus.
+Aber leider scheint SmartEiffel nicht mehr weiterentwickelt zu werden, es bietet nur eine minimale Entwicklungsumgebung, und Kompatibilit&auml;t ist weder mit dem Eiffel-Standard noch mit ISE-Eiffel gegeben.
+
+<H4>Fragen:</H4>
+Beantworten Sie anhand einer Beispielaufgabe (siehe unten) folgende Fragen:
+<UL>
+<LI>Wie hoch ist der Aufwand in Eiffel, um Zusicherungen im Programmcode zu formulieren?
+<LI>Wie stark wirkt sich die &Uuml;berpr&uuml;fung von Zusicherungen auf die Laufzeit aus?
+<LI>Vorbedingungen d&uuml;rfen im Untertyp nicht st&auml;rker und Nachbedingungen nicht schw&auml;cher werden, um Ersetzbarkeit zu garantieren.
+  Der Eiffel-Compiler &uuml;berpr&uuml;ft diese Bedingungen.
+  Ist es (trotz eingeschalteter &Uuml;berpr&uuml;fung von Zusicherungen) m&ouml;glich, diese Bedingungen zu umgehen?
+  Wenn ja, wie?
+<LI>Eiffel erlaubt kovariante Eingangsparametertypen.
+  Unter welchen Bedingungen f&uuml;hrt das zu Problemen, und wie &auml;u&szlig;ern sich diese?
+  K&ouml;nnen Sie ein Programm schreiben, in dem die Verwendung kovarianter Eingangsparametertypen zu einer Exception f&uuml;hrt?
+<LI>Vereinfachen kovariante Eingangsparametertypen die Programmierung?
+  Unter welchen Bedingungen ist das so?
+</UL>
+
+<H4>Aufgabe:</H4>
+Folgende Aufgabenstellung soll als Anregung dienen.
+Sie k&ouml;nnen auch eine andere Aufgabe vergleichbaren Umfangs in Eiffel l&ouml;sen.
+<P>
+Schreiben Sie ein Programm zur Verwaltung von Bankkonten.
+Jedes Konto verf&uuml;gt &uuml;ber Angaben zu den Zeichnungsberechtigten, einen Kreditrahmen (bei dessen &Uuml;berschreitung die Bank in der Regel keine weitere &Uuml;berziehung zul&auml;sst), je einen Prozentsatz f&uuml;r die Sollverzinsung (Zinsen f&uuml;r den Betrag, um den das Konto &uuml;berzogen ist) und Habenverzinsung (Zinsen f&uuml;r das Guthaben am Konto) und den aktuellen Betrag am Konto.
+Es sollen Operationen f&uuml;r Bareinzahlungen, Barauszahlungen, &Uuml;berweisungen zwischen Konten sowie Abfragen und &Auml;nderungen der zu den Konten gespeicherten Daten (ausgenommen &Auml;nderungen des Guthabens) unterst&uuml;tzt werden.
+<P>
+Auf Konten sollen zumindest folgende Zusicherungen gelten:
+Die Verzinsung und der Kreditrahmen sollen stets innerhalb der vom Kreditinstitut vorgegebenen Grenzen bleiben.
+Es gibt einen Mindestbetrag von 2 Euro f&uuml;r jede Einzahlung, Auszahlung und &Uuml;berweisung.
+<P>
+Entwickeln Sie zwei Untertypen des Kontos: Ein Studentenkonto und ein Pensionskonto.
+Diese Konten sollen jeweils nur einen Zeichnungsberechtigten haben, der Student bzw. Pensionist ist.
+&Uuml;berpr&uuml;fen Sie, ob die Zeichnungsberechtigten tats&auml;chlich die richtigen Typen haben, wobei <Q>Student</Q> und <Q>Pensionist</Q> Untertypen von <Q>Person</Q> sind.
+Studenten- und Pensionskonten sollen folgende Unterschiede zu normalen Konten aufweisen:
+F&uuml;r Verzinsungen und Kreditrahmen gelten engere Grenzen als bei normalen Konten, daf&uuml;r gelten niedrigere Mindestbetr&auml;ge f&uuml;r Einzahlungen, Auszahlungen und &Uuml;berweisungen (1 Euro).
+&Uuml;berlegen Sie sich weitere Zusicherungen, die die M&ouml;glichkeiten und vor allem Grenzen von Zusicherungen demonstrieren.
+<P>
+Schreiben Sie ein einfaches Programm zum Testen der Konten.
+Achten Sie generell auf ein sinnvolles Sichtbarmachen von <Q>features</Q> in anderen Programmteilen.
+</DIV>
+
+<DIV class="leftmenu">
+<DL class="leftbuttons">
+  <DT><A href="http://www.complang.tuwien.ac.at/" title="Die Complang-Gruppe">Complang</A>
+  <DT><A href="http://www.complang.tuwien.ac.at/franz/" title="Franz Puntigam - TU Wien, Complang-Gruppe">Puntigam</A>
+  <DT>&nbsp;&nbsp;&nbsp;<A href="ueber" title="&Uuml;ber Franz Puntigam">&Uuml;ber&nbsp;mich</A>
+  <DT>&nbsp;&nbsp;&nbsp;<A href="research" title="Research of Franz Puntigam">Research</A>
+  <DT>&nbsp;&nbsp;&nbsp;<A href="lehre" title="Lehrangebot von Franz Puntigam">Lehre</A>
+  <DT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A href="lehre10s" title="Puntigams Lehrangebot im Sommersemester 2010">LVAs&nbsp;2010&nbsp;S</A>
+  <DT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A href="progspr10s" title="LVA 185.208: Programmiersprachen - VL&nbsp;2.0, 2010&nbsp;S">Prog.spr.</A>
+  <DT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A href="foop10s" title="LVA 185.211: Fortgeschrittene objektorientierte Programmierung - VL&nbsp;2.0, 2010&nbsp;S">FOOP</A>
+  <DT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A href="foop10s1" title="1. &Uuml;bungsaufgabe - Fortgeschrittene objektorientierte Programmierung, 2010 S">1.&nbsp;Aufgabe</A>
+  <DT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<STRONG title="Kurzbezeichnung der aktuellen Seite">2.&nbsp;Aufgabe</STRONG>
+  <DT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A href="lehre09w" title="Puntigams Lehrangebot im Wintersemester 2009/2010">LVAs&nbsp;2009&nbsp;W</A>
+  <DT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A href="lehre_alt" title="Puntigams Lehrangebot in fr&uuml;heren Semestern">fr&uuml;here&nbsp;Lehre</A>
+  <DT>&nbsp;&nbsp;&nbsp;<A href="links" title="Links">Links</A>
+</DL>
+</DIV>
+
+<DIV class="rightmenu">
+<DL class="rightbuttons">
+  <DT><A href="sitemap" title="&Uuml;berblick &uuml;ber die Seiten">Sitemap</A>
+  <DT><A href="kontakt" title="Kontakt zu Franz Puntigam">Kontakt</A>
+  <DT class="header">Schnellzugriff:
+  <DT><A href="foop10s1" title="1. &Uuml;bungsaufgabe - Fortgeschrittene objektorientierte Programmierung, 2010 S">vorige&nbsp;Aufgabe</A>
+  <DT class="header">Links:
+  <DT><A href="http://www.cetus-links.org/oo_eiffel.html">Eiffel&nbsp;(Cetus-Link)</A>
+  <DT><A href="http://www.eiffel.com/">ISE-Eiffel</A>
+  <DT><A href="http://docs.eiffel.com/">Eiffel-Doku</A>
+</DL>
+</DIV>
+
+<DIV class="fi">
+<A href="http://www.informatik.tuwien.ac.at/" title="Fakult&auml;t f&uuml;r Informatik">
+  <IMG class="fi" alt="Fakult&auml;t f&uuml;r Informatik" src="http://www.complang.tuwien.ac.at/fi">
+</A>
+</DIV>
+
+<DIV class="tu">
+<A href="http://www.tuwien.ac.at/" title="Technische Universit&auml;t Wien">
+  <IMG class="tu" alt="Technische Universit&auml;t Wien" src="http://www.complang.tuwien.ac.at/tu">
+</A>
+</DIV>
+
+<ADDRESS>
+  <A href="#top" title="Anfang dieser Seite">Anfang</A> |
+  <A href="http://validator.w3.org/check/referer" title="&Uuml;berpr&uuml;fung dieser Seite auf syntaktische Korrektheit">HTML 4.01</A> |
+  letzte &Auml;nderung: 2010-03-24 (<A href="http://www.complang.tuwien.ac.at/franz/" title="Verantwortlich f&uuml;r letzte &Auml;nderung">Puntigam</A>)
+</ADDRESS>
+</BODY>
+</HTML>

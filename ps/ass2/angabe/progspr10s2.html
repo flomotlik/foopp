@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+               "http://www.w3.org/TR/html4/strict.dtd">
+<HTML lang="de">
+<HEAD>
+  <META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <LINK href="http://www.complang.tuwien.ac.at/complang.css" rel="stylesheet" type="text/css">
+  <LINK href="http://www.complang.tuwien.ac.at/favicon.ico" rel="shortcut icon" type="image/x-icon">
+  <LINK href="http://www.complang.tuwien.ac.at/franz/" rel="Start" type="text/html">
+  <TITLE>2. &Uuml;bungsaufgabe - Programmiersprachen, 2010&nbsp;S</TITLE>
+</HEAD>
+
+<BODY id="top">
+<DIV class="logo">
+<A href="http://www.complang.tuwien.ac.at/" title="Die Complang-Gruppe">
+  <IMG class="logo" alt="Computer Languages" src="http://www.complang.tuwien.ac.at/logo">
+</A>
+</DIV>
+
+<DIV>
+<P class="rightquote">
+  Programmiersprachen<BR>
+   LVA 185.208, VL 2.0, 2010 S
+</P>
+<H1>2. &Uuml;bungsaufgabe</H1>
+<H4>Aufgabe:</H4>
+Entwickeln Sie in ML oder Haskell (oder einer anderen stark typisierten funktionalen Programmiersprache) ein Programm zur Verwaltung von Software (z.B. Texte, Bilder, Filme, Musikst&uuml;cke, Computerspiele, etc.) auf unterschiedlichen Datentr&auml;gern.
+Datentr&auml;ger k&ouml;nnen physisch sein (wie Buch, CD, DVD, Festplatte und Speicherkarte) oder abstrakt (wie Web-Adresse oder Adresse innerhalb eines anderen Datentr&auml;gers).
+Von jeder Software kann es mehrere Versionen geben, und jede Version kann auf mehreren Datentr&auml;gern gespeichert sein.
+Daten wie Titel, Autoren und Entstehungszeit sollten, sofern bekannt, f&uuml;r jede Software angegeben sein, weitere Kommentare k&ouml;nnen dazugegeben werden.
+Implementieren Sie geeignete Suchm&ouml;glichkeiten nach Software.
+Dabei soll die Suche nach unterschiedlichen Kriterien einschr&auml;nkbar sein, z.B. nur Bilder, nur auf bestimmten Datentr&auml;gern oder bestimmten Arten von Datentr&auml;gern, nur Software ab einer bestimmten Versionsnummer, nach Zeitr&auml;umen der Entstehung und nach W&ouml;rtern, die im Titel oder in der Autorenliste vorkommen.
+Die Daten sollen beim absichtlichen Beenden des Programms nicht verloren gehen, sondern persistent (in einer Datei) gespeichert werden.
+Die Datenmengen werden klein bleiben.
+Es ist daher problemlos m&ouml;glich, alle Daten beim Programmstart einzulesen und vor Beendigung neu zu schreiben.
+<P>
+Bei dieser Aufgabe kommt es darauf an, Daten zu verwalten.
+Dies scheint auf den ersten Blick in Widerspruch zu modernen funktionalen Sprachen zu stehen.
+Bei genauerer Betrachtung ergeben sich aber viele L&ouml;sungsm&ouml;glichkeiten.
+Ein Blick in die mit dem Programmiersystem mitgelieferten Bibliotheken kann vielleicht bei der Auswahl des L&ouml;sungsansatzes helfen.
+
+<H4>ML:</H4>
+Zur Programmierung in ML verwenden Sie am besten <A class="intext" href="http://caml.inria.fr/">Objective Caml</A>.
+Dieses System erweitert ML unter anderem um objektorientierte Konzepte, die einen Programmierstil &auml;hnlich dem von Java erlauben w&uuml;rden.
+Falls Sie Ihr Programm in Objective Caml schreiben, schr&auml;nken Sie sich bitte auf die funktionalen Konzepte der Sprache ein, und verzichten Sie auf die objektorientierten Erweiterungen.
+
+<H4>Haskell:</H4>
+Allgemeine Informationen zu Haskell (beispielsweise die Sprachdefinition) finden Sie auf der <A class="intext" href="http://www.haskell.org/">Haskell-Seite</A>.
+Sie haben im Wesentlichen die Wahl zwischen GHC und Hugs.
+<A class="intext" href="http://www.haskell.org/ghc/">GHC</A> is ein eher umfangreiches und effizientes System mit zahlreichen Sprach-Erweiterungen, das sich auch f&uuml;r gr&ouml;&szlig;ere Anwendungen eignet, aber vielleicht einen etwas h&ouml;heren Einlernaufwand mit sich bringt.
+Sie k&ouml;nnen gleich eine einigerma&szlig;en vollst&auml;ndige <A class="intext" href="http://hackage.haskell.org/platform/">Entwicklungsumgebung</A> mit mehreren Werkzeugen installieren.
+<A class="intext" href="http://www.haskell.org/hugs/">Hugs</A> ist ein einfacheres, nur auf einem Interpreter basierendes System, das Sie m&ouml;glicherweise schon aus <Q>Funktionale Programmierung</Q> kennen.
+F&uuml;r die L&ouml;sung dieser Aufgabe reicht Hugs vollkommen aus.
+</DIV>
+
+<DIV class="leftmenu">
+<DL class="leftbuttons">
+  <DT><A href="http://www.complang.tuwien.ac.at/" title="Die Complang-Gruppe">Complang</A>
+  <DT><A href="http://www.complang.tuwien.ac.at/franz/" title="Franz Puntigam - TU Wien, Complang-Gruppe">Puntigam</A>
+  <DT>&nbsp;&nbsp;&nbsp;<A href="ueber" title="&Uuml;ber Franz Puntigam">&Uuml;ber&nbsp;mich</A>
+  <DT>&nbsp;&nbsp;&nbsp;<A href="research" title="Research of Franz Puntigam">Research</A>
+  <DT>&nbsp;&nbsp;&nbsp;<A href="lehre" title="Lehrangebot von Franz Puntigam">Lehre</A>
+  <DT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A href="lehre10s" title="Puntigams Lehrangebot im Sommersemester 2010">LVAs&nbsp;2010&nbsp;S</A>
+  <DT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A href="progspr10s" title="LVA 185.208: Programmiersprachen - VL&nbsp;2.0, 2010&nbsp;S">Prog.spr.</A>
+  <DT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A href="progspr10s1" title="1. &Uuml;bungsaufgabe - Programmiersprachen, 2010&nbsp;S">1.&nbsp;Aufgabe</A>
+  <DT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<STRONG title="Kurzbezeichnung der aktuellen Seite">2.&nbsp;Aufgabe</STRONG>
+  <DT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A href="foop10s" title="LVA 185.211: Fortgeschrittene objektorientierte Programmierung - VL&nbsp;2.0, 2010&nbsp;S">FOOP</A>
+  <DT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A href="lehre09w" title="Puntigams Lehrangebot im Wintersemester 2009/2010">LVAs&nbsp;2009&nbsp;W</A>
+  <DT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A href="lehre_alt" title="Puntigams Lehrangebot in fr&uuml;heren Semestern">fr&uuml;here&nbsp;Lehre</A>
+  <DT>&nbsp;&nbsp;&nbsp;<A href="links" title="Links">Links</A>
+</DL>
+</DIV>
+
+<DIV class="rightmenu">
+<DL class="rightbuttons">
+  <DT><A href="sitemap" title="&Uuml;berblick &uuml;ber die Seiten">Sitemap</A>
+  <DT><A href="kontakt" title="Kontakt zu Franz Puntigam">Kontakt</A>
+  <DT class="header">Schnellzugriff:
+  <DT><A href="progspr10s1" title="1. &Uuml;bungsaufgabe - Programmiersprachen, 2010&nbsp;S">vorige&nbsp;Aufgabe</A>
+  <DT class="header">Links:
+  <DT><A href="http://caml.inria.fr/">Objective&nbsp;Caml</A>
+  <DT><A href="http://www.haskell.org/">Haskell</A>
+  <DT><A href="http://www.haskell.org/ghc/">GHC</A>
+  <DT><A href="http://www.haskell.org/hugs/">Hugs</A>
+</DL>
+</DIV>
+
+<DIV class="fi">
+<A href="http://www.informatik.tuwien.ac.at/" title="Fakult&auml;t f&uuml;r Informatik">
+  <IMG class="fi" alt="Fakult&auml;t f&uuml;r Informatik" src="http://www.complang.tuwien.ac.at/fi">
+</A>
+</DIV>
+
+<DIV class="tu">
+<A href="http://www.tuwien.ac.at/" title="Technische Universit&auml;t Wien">
+  <IMG class="tu" alt="Technische Universit&auml;t Wien" src="http://www.complang.tuwien.ac.at/tu">
+</A>
+</DIV>
+
+<ADDRESS>
+  <A href="#top" title="Anfang dieser Seite">Anfang</A> |
+  <A href="http://validator.w3.org/check/referer" title="&Uuml;berpr&uuml;fung dieser Seite auf syntaktische Korrektheit">HTML 4.01</A> |
+  letzte &Auml;nderung: 2010-03-24 (<A href="http://www.complang.tuwien.ac.at/franz/" title="Verantwortlich f&uuml;r letzte &Auml;nderung">Puntigam</A>)
+</ADDRESS>
+</BODY>
+</HTML>
