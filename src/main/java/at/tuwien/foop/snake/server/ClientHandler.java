@@ -58,6 +58,7 @@ public class ClientHandler implements Client {
 		// take the last direction that was transmitted within the last cycle
 		try {
 			while (this.in.available() > 0) {
+				System.out.println("Reading new move from client");
 				this.currentDirection = (Direction) this.in.readObject();
 			}
 		} catch (IOException e) {

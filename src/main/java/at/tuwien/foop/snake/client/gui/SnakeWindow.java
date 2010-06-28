@@ -44,6 +44,7 @@ public class SnakeWindow extends JFrame {
 		this.setLocation(400, 200);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
+		this.setFocusable(false);
 		
 		this.panel = new JPanel();
 		this.panel.setMinimumSize(new Dimension(300, 20));
@@ -97,11 +98,20 @@ public class SnakeWindow extends JFrame {
 		this.panel.add(this.button);
 		this.add(this.panel);
 		this.pack();
-		
-		this.addKeyListener(new KeyListener() {
+	}
+	
+	public void connect() throws IOException, ClassNotFoundException, NumberFormatException {
+		this.connect(this.host.getText(), Integer.parseInt(this.port.getText()));
+	}
+	
+	public void connect(String host, int port) throws IOException, ClassNotFoundException {
+		this.client = new SnakeClient(host, port);
+		// get size of playing field
+		this.display = new PlayingField(this.client.getPlayingFieldSize());
+		this.display.addKeyListener(new KeyListener() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				System.out.println("Key pressed: " + e.getKeyCode());
+//				System.out.println("Key pressed: " + e.getKeyCode());
 				try {
 					switch (e.getKeyCode()) {
 					case KeyEvent.VK_DOWN:
@@ -131,16 +141,6 @@ public class SnakeWindow extends JFrame {
 			}
 			
 		});
-	}
-	
-	public void connect() throws IOException, ClassNotFoundException, NumberFormatException {
-		this.connect(this.host.getText(), Integer.parseInt(this.port.getText()));
-	}
-	
-	public void connect(String host, int port) throws IOException, ClassNotFoundException {
-		this.client = new SnakeClient(host, port);
-		// get size of playing field
-		this.display = new PlayingField(this.client.getPlayingFieldSize());
 		this.game = new SwingWorker<Void,Void>() {
 			@Override
 			protected Void doInBackground() throws Exception {
