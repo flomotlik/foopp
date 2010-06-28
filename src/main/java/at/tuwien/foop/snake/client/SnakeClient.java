@@ -35,7 +35,7 @@ public class SnakeClient {
 	public void setNextMove(Direction move) throws IOException {
 		System.out.println("Sending move " + move + " to Server");
 		this.out.writeObject(move);
-		this.out.flush();
+//		this.out.flush();
 	}
 	
 	// this call blocks!

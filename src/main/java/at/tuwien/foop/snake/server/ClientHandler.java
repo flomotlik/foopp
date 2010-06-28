@@ -9,7 +9,7 @@ import at.tuwien.foop.snake.interfaces.Client;
 import at.tuwien.foop.snake.interfaces.Colour;
 import at.tuwien.foop.snake.interfaces.Direction;
 
-public class ClientHandler implements Client {
+public class ClientHandler extends Thread implements Client {
 	
 	private Socket client;
 	
@@ -52,23 +52,26 @@ public class ClientHandler implements Client {
 		System.out.println("Client " + this.client + " disconnected!");
 	}
 	
-	// returns the move or action sent by this client
 	@Override
-	public Direction nextDirection() {
+	public void run() {
 		// take the last direction that was transmitted within the last cycle
 		try {
-			while (this.in.available() > 0) {
+			while (true) {
 				System.out.println("Reading new move from client");
 				this.currentDirection = (Direction) this.in.readObject();
 			}
 		} catch (IOException e) {
-			this.currentDirection = Direction.NONE;
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			this.currentDirection = Direction.NONE;
 			e.printStackTrace();
 		}
-		System.out.println("Move reported by client " + this.client + " is: " + this.currentDirection);
+		this.currentDirection = Direction.NONE;
+	}
+	
+	// returns the last move or action sent by this client
+	@Override
+	public Direction nextDirection() {
+		System.out.println("Last move reported by client " + this.client + " is: " + this.currentDirection);
 		return this.currentDirection;
 	}
 	

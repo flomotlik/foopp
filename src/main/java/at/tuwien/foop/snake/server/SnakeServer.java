@@ -80,6 +80,7 @@ public class SnakeServer extends Thread {
 				ClientHandler newClient;
 				while ((newClient = newClients.poll()) != null) {
 					newClient.init(this.game.getWidth(), this.game.getHeight());
+					newClient.start();
 					this.game.addSnake(newClient);
 					this.clients.add(newClient);
 				}
